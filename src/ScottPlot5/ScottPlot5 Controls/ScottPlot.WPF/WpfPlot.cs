@@ -57,5 +57,35 @@ namespace ScottPlot.WPF
 
             SKElement?.InvalidateVisual();
         }
+
+        // CurrentInstance: provides a property e.g. to use in MVVM view models to avoid having
+        // to add code-behind for forwarding the control instance.
+
+        public WpfPlot() : base()
+        {
+            // Defer updating the property value because WPF will set the bound property value
+            // to null on load / creation at InitializeComponent.
+            // This InvokeAsync will update it afterwards to the correct value.
+            Application.Current?.Dispatcher.InvokeAsync(
+                () => { SetValue(CurrentInstanceProperty, this); },
+                System.Windows.Threading.DispatcherPriority.Loaded
+            );
+        }
+
+        public static readonly DependencyProperty CurrentInstanceProperty =
+           DependencyProperty.Register(nameof(CurrentInstance), typeof(WpfPlot), typeof(WpfPlot),
+               new FrameworkPropertyMetadata(defaultValue: null));
+
+        public WpfPlot? CurrentInstance
+        {
+            get
+            {
+                return this;
+            }
+            set
+            {
+                SetValue(CurrentInstanceProperty, this);
+            }
+        }
     }
 }
