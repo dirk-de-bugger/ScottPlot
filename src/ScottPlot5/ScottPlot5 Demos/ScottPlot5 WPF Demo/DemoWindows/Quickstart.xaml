@@ -7,5 +7,11 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="ScottPlot WPF Quickstart" Height="400" Width="600">
-    <wpf:WpfPlot Name="WpfPlot1"/>
+
+    <Window.DataContext>
+        <local:QuickstartViewModel />
+    </Window.DataContext>
+
+    <wpf:WpfPlot Name="WpfPlot1"
+        CurrentInstance="{Binding WpfPlot1Property, Mode=OneWayToSource}"/>
 </Window>
